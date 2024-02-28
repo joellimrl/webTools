@@ -8,6 +8,7 @@ body {
 	align-items: center;
 	min-height: 100vh;
 	margin: 0;
+	gap: 50px;
 }
 
 .clock {
@@ -17,6 +18,25 @@ body {
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 	padding: 20px;
 	width: 300px;
+}
+
+.volume {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	background-color: #fff;
+	height: 300px;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+	gap: 5px;
+	padding-top: 1%;
+	padding-bottom: 1%;
+}
+
+.slider {
+	appearance: slider-vertical;
+	height: 100%;
 }
 
 h1 {
@@ -39,7 +59,6 @@ h3 {
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
-	align-items: center;
 }
 
 .input-field {
@@ -65,8 +84,7 @@ input[type="time"] {
 	align-items: center;
 }
 
-#setAlarm,
-#updateTime {
+#setAlarm {
 	background-color: #007bff;
 	color: #fff;
 	border: none;
@@ -77,9 +95,12 @@ input[type="time"] {
 	transition: background-color 0.3s;
 }
 
-#setAlarm:hover,
-#updateTime:hover {
+#setAlarm:hover {
 	background-color: #0056b3;
+}
+
+#errorMessage {
+	color: #ff0000
 }
 
 .alarms {

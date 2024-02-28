@@ -1,20 +1,44 @@
 let currentTime = document.getElementById("time");
 let dateInput = document.getElementById("alarmDate");
-let tInput = document.getElementById("alarmTime");
+let timeInput = document.getElementById("alarmTime");
 let setAlarmButton = document.getElementById("setAlarm");
-let contan = document.getElementById("alarms");
-let alarmDiv;
-let selectedDate;
-let interVal;
-let maxValue = 3;
-let cnt = 0;
-let almTimesArray = [];
+let alarmsDisplayDiv = document.getElementById("alarms");
+let errorMessage = document.getElementById("errorMessage");
+let volumeSlider = document.getElementById("volumeRange");
+let volumeIcon = document.getElementById("volumeIcon");
+let maxValue = 10; // check if need max value
+let count = 0;
+const alarmsObj = {};
+const audio = new Audio('../audio/alarm-clock-loud.mp3');
+audio.volume = 0.5; // 0 to 1
+
+function initDateAndTime() {
+	const curr = new Date();
+	dateInput.min = new Date().toLocaleDateString('fr-ca');
+	dateInput.value = new Date().toLocaleDateString('fr-ca');
+	timeInput.value = `${String(curr.getHours()).padStart(2, "0")}:${String(curr.getMinutes() + 1).padStart(2, "0")}`; // Default time is +5 minutes after current
+}
+
+function adjustVolume() {
+	const volumeValue = parseInt(volumeSlider.value);
+	console.log('🚀 ~ adjustVolume ~ volumeValue:', volumeValue);
+	// Set icon accordingly
+	if (volumeValue === 0) {
+		volumeIcon.src = "../icons/volume-mute.svg";
+	} else if (volumeValue > 0 && volumeValue <= 50) {
+		volumeIcon.src = "../icons/volume-down.svg";
+	} else {
+		volumeIcon.src = "../icons/volume-up.svg"
+	}
+	// Set volume
+	audio.volume = volumeValue / 100;
+}
 
 function timeChangeFunction() {
-	let curr = new Date();
-	let hrs = curr.getHours();
+	const curr = new Date();
 	let min = String(curr.getMinutes()).padStart(2, "0");
 	let sec = String(curr.getSeconds()).padStart(2, "0");
+	let hrs = curr.getHours();
 	let period = "AM";
 	if (hrs >= 12) {
 		period = "PM";
@@ -24,78 +48,67 @@ function timeChangeFunction() {
 	}
 	hrs = String(hrs).padStart(2, "0");
 	currentTime.textContent = `${hrs}:${min}:${sec} ${period}`;
+	
+	// Checking alarms here
+	let selectedDateString = curr.toLocaleString();
+	if (selectedDateString in alarmsObj) {
+		playAlert()
+		cleanUpAlarm(selectedDateString);
+	}
+}
+
+function playAlert() {
+  audio.play();
+	// alert("Time to wake up laaaaaaaaaa!");
+}
+
+function cleanUpAlarm(selectedDateString) {
+	let currAlarm = document.getElementById(selectedDateString);
+	currAlarm.remove();
+	count--;
+	delete alarmsObj[selectedDateString];
 }
 
 function alarmSetFunction() {
 	let now = new Date();
-	selectedDate = new Date(dateInput.value + "T" + tInput.value);
+	let selectedDate = new Date(dateInput.value + "T" + timeInput.value);
+	let selectedDateString = selectedDate.toLocaleString();
+	// Validations
 	if (selectedDate <= now) {
-		alert(`Invalid time. Please select 
-	a future date and time.`);
+		errorMessage.textContent = `Invalid time. Please select a future date and time.`;
 		return;
-	}
-	if (almTimesArray.includes(selectedDate.toString())) {
-		alert(`You cannot set multiple 
-	alarms for the same time.`);
+	} else if (selectedDateString in alarmsObj) {
+		errorMessage.textContent = `You cannot set multiple alarms for the same time.`;
 		return;
-	}
-	if (cnt < maxValue) {
-		let timeUntilAlarm = selectedDate - now;
-		alarmDiv = document.createElement("div");
-		alarmDiv.classList.add("alarm");
-		alarmDiv.innerHTML = `
-			<span>
-			${selectedDate.toLocaleString()}
-			</span>
-			<button class="delete-alarm">
-			Delete
-			</button>
-		`;
-		alarmDiv
-			.querySelector(".delete-alarm")
-			.addEventListener("click", () => {
-				alarmDiv.remove();
-				cnt--;
-				clearTimeout(interVal);
-				const idx = almTimesArray.indexOf(selectedDate.toString());
-				if (idx !== -1) {
-					almTimesArray.splice(idx, 1);
-				}
-			});
-		interVal = setTimeout(() => {
-			alert("Time to wake up!");
-			alarmDiv.remove();
-			cnt--;
-			const alarmIndex = almTimesArray.indexOf(selectedDate.toString());
-			if (alarmIndex !== -1) {
-				almTimesArray.splice(alarmIndex, 1);
-			}
-		}, timeUntilAlarm);
-		contan.appendChild(alarmDiv);
-		cnt++;
-		almTimesArray.push(selectedDate.toString());
+	} else if (count >= maxValue) {
+		errorMessage.textContent = `You have reached the limit of ${maxValue} alarms`;
+		return;
 	} else {
-		alert("You can only set a maximum of 3 alarms.");
+		errorMessage.textContent = ``
 	}
-}
 
-function showAlarmFunction() {
-	let alarms = contan.querySelectorAll(".alarm");
-	alarms.forEach((alarm) => {
-		let deleteButton = alarm.querySelector(".delete-alarm");
-		deleteButton.addEventListener("click", () => {
-			alarmDiv.remove();
-			cnt--;
-			clearTimeout(interVal);
-			const alarmIndex = almTimesArray.indexOf(selectedDate.toString());
-			if (alarmIndex !== -1) {
-				almTimesArray.splice(alarmIndex, 1);
-			}
+	// Create HTML element
+	let alarmDiv = document.createElement("div");
+	alarmDiv.classList.add("alarm");
+	alarmDiv.id = selectedDateString;
+	alarmDiv.innerHTML = `
+		<span>${selectedDateString}</span> <button class="delete-alarm">Delete</button>
+	`;
+	// Set delete button
+	alarmDiv
+		.querySelector(".delete-alarm")
+		.addEventListener("click", () => {
+			cleanUpAlarm(selectedDateString);
 		});
-	});
+	alarmsDisplayDiv.appendChild(alarmDiv);
+	alarmsObj[selectedDateString] = {
+		value: selectedDateString
+	}
+	count++;
 }
 
-showAlarmFunction();
-setInterval(timeChangeFunction, 1000);
 setAlarmButton.addEventListener("click", alarmSetFunction);
+volumeSlider.addEventListener("change", adjustVolume)
+setInterval(timeChangeFunction, 1000);
 timeChangeFunction();
+initDateAndTime();
