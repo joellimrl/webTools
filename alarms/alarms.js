@@ -16,12 +16,11 @@ function initDateAndTime() {
 	const curr = new Date();
 	dateInput.min = new Date().toLocaleDateString('fr-ca');
 	dateInput.value = new Date().toLocaleDateString('fr-ca');
-	timeInput.value = `${String(curr.getHours()).padStart(2, "0")}:${String(curr.getMinutes() + 1).padStart(2, "0")}`; // Default time is +5 minutes after current
+	timeInput.value = `${String(curr.getHours()).padStart(2, "0")}:${String(curr.getMinutes() + 5).padStart(2, "0")}`; // Default time is +5 minutes after current
 }
 
 function adjustVolume() {
 	const volumeValue = parseInt(volumeSlider.value);
-	console.log('🚀 ~ adjustVolume ~ volumeValue:', volumeValue);
 	// Set icon accordingly
 	if (volumeValue === 0) {
 		volumeIcon.src = "../icons/volume-mute.svg";
@@ -92,11 +91,13 @@ function alarmSetFunction() {
 	alarmDiv.classList.add("alarm");
 	alarmDiv.id = selectedDateString;
 	alarmDiv.innerHTML = `
-		<span>${selectedDateString}</span> <button class="delete-alarm">Delete</button>
+		<span class="alarm-time">${selectedDateString}</span>
+		<input class="alarm-note" placeholder="Type a note for this alarm"></input>
+		<button class="alarm-delete">Delete</button>
 	`;
 	// Set delete button
 	alarmDiv
-		.querySelector(".delete-alarm")
+		.querySelector(".alarm-delete")
 		.addEventListener("click", () => {
 			cleanUpAlarm(selectedDateString);
 		});

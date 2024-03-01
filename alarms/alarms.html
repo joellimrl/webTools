@@ -11,39 +11,40 @@
 </head>
 
 <body>
-	<div class="volume">
-		<img src="../icons/volume-down.svg" id="volumeIcon"></img>
-		<input orient="vertical" type="range" min="0" max="100" value="50" class="slider" id="volumeRange">
+	<div class="main">
+		<div class="volume">
+			<img src="../icons/volume-down.svg" id="volumeIcon"></img>
+			<input orient="vertical" type="range" min="0" max="100" value="50" class="slider" id="volumeRange">
+		</div>
+		<div class="clock">
+			<h1>Alarm</h1>
+			<div class="time" id="time">
+				00:00:00
+			</div>
+			<div class="input-row">
+				<div class="input-field">
+					<input type="date"
+						id="alarmDate"
+						class="alarm-input"
+						min="">
+				</div>
+				<div class="input-field">
+					<input type="time" id="alarmTime"
+						class="alarm-input">
+				</div>
+				<div id="errorMessage"></div>
+				<button id="setAlarm">
+					Set Alarm
+				</button>
+			</div>
+		</div>
+		<div class="settings" hidden="true">
+			<h1>Settings</h1>
+			<span>In progress</span><br>
+			Ring for 5 seconds only (or until off button clicked)
+		</div>
 	</div>
-	<div class="clock">
-		<h1>
-			Alarm
-		</h1>
-		<h3>
-			A Simple Alarm Clock with
-			HTML, CSS & JavaScript
-		</h3>
-		<div class="time" id="time">
-			00:00:00
-		</div>
-		<div class="input-row">
-			<div class="input-field">
-				<input type="date"
-					id="alarmDate"
-					class="alarm-input"
-					min="">
-			</div>
-			<div class="input-field">
-				<input type="time" id="alarmTime"
-					class="alarm-input">
-			</div>
-			<div id="errorMessage"></div>
-			<button id="setAlarm">
-				Set Alarm
-			</button>
-		</div>
-		<div class="alarms" id="alarms">
-		</div>
+	<div class="alarms" id="alarms">
 	</div>
 	<script src="alarms.js"></script>
 </body>

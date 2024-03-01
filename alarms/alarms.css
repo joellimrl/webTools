@@ -4,6 +4,7 @@ body {
 		linear-gradient(45deg, #0c093d, #3399f8);
 	color: #fff;
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	min-height: 100vh;
@@ -11,12 +12,25 @@ body {
 	gap: 50px;
 }
 
-.clock {
+/* 3 main cards */
+.main {
+	color: #fff;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 50px;
+}
+
+.main > div {
 	text-align: center;
 	background-color: #fff;
 	border-radius: 10px;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-	padding: 20px;
+	height: 300px;
+}
+
+.clock {
+	padding: 5%;
 	width: 300px;
 }
 
@@ -24,37 +38,35 @@ body {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	text-align: center;
-	background-color: #fff;
-	height: 300px;
-	border-radius: 10px;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-	gap: 5px;
-	padding-top: 1%;
-	padding-bottom: 1%;
+	gap: 10px;
+	padding-top: 5%;
+	padding-bottom: 5%;
 }
 
+.settings {
+	padding: 5%;
+	color: #000;
+}
+
+/* Volume slider */
 .slider {
 	appearance: slider-vertical;
 	height: 100%;
 }
 
 h1 {
-	font-size: 2rem;
+	font-size: 1.5rem;
 	color: green;
 }
 
-h3 {
-	font-size: 1.0rem;
-	color: #333;
-}
-
+/* Main moving clock */
 .time {
 	font-size: 2rem;
 	margin: 20px 0;
 	color: #333;
 }
 
+/* Inputs for date and time */
 .input-row {
 	display: flex;
 	flex-direction: column;
@@ -77,13 +89,7 @@ input[type="time"] {
 	max-width: 200px;
 }
 
-.button-row {
-	display: flex;
-	gap: 10px;
-	justify-content: center;
-	align-items: center;
-}
-
+/* Set alarm button */
 #setAlarm {
 	background-color: #007bff;
 	color: #fff;
@@ -99,27 +105,59 @@ input[type="time"] {
 	background-color: #0056b3;
 }
 
+/* Error message for set alarm */
 #errorMessage {
-	color: #ff0000
+	color: #ff0000;
 }
 
+/* Alarm cards */
 .alarms {
-	margin-top: 20px;
 	text-align: left;
 	color: #333;
+	display: flex;
+	gap: 10px;
 }
 
+/* Alarm card div */
 .alarm {
-	background-color: #f0f0f0;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	padding: 10px;
-	margin: 10px 0;
+	text-align: center;
+	background-color: #fff;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+	padding: 5%;
+	width: 300px;
+	height: 300px;
+	
 	display: flex;
-	justify-content: space-between;
+	flex-direction: column;
+	justify-content: center;
 	align-items: center;
 	animation: fadeIn 0.5s ease-in-out;
 	font-size: 14px;
+}
+
+.alarm-time {
+	font-size: 1.5rem;
+	margin: 20px 0;
+	color: #333;
+}
+
+.alarm-note {
+	font-size: 1rem;
+	margin: 20px 0;
+	color: #333;
+}
+
+.alarm-progress {
+	font-size: 1rem;
+	margin: 20px 0;
+	color: #333;
+}
+
+.alarm-delete {
+	font-size: 1.5rem;
+	margin: 20px 0;
+	color: #333;
 }
 
 @keyframes fadeIn {
